@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIZHI SYSTEMS</title>
+    <!-- Include Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-storage-compat.js"></script>
+    <!-- Include Firebase JavaScript SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.3.0/firebase-database-compat.js"></script>
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        background: url('vizhi_bg.png') no-repeat center center fixed;
+        background-size: cover;
+        background-position: center top;
+    }
+    #header1{
+            background-color: rgba(0, 0, 0, 0.655);
+        }
+
+        h3, h2 {
+            color: #00c750; /* Dark blue header color */
+        }
+
+        #master {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-radius: 25px;
+            background-color: #1a1a1a9b; 
+            margin-left: 2%;
+            margin-right:2%;
+        }
+
+        #base,
+        #chartContainer {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 1%
+        }
+
+        #base {
+            max-width: 600px; /* Set the maximum width for the left container */
+            
+        }
+
+        #chartContainer {
+            overflow: auto; /* Darker background for the chart container */
+        }
+
+        #display-image {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #00c750;
+            margin-bottom: 20px;
+        }
+
+        #data-container1,
+        #data-container2 {
+            margin: 10px 0;
+            color: #ffffff; /* White text color */
+            font-size: 18px;
+        }
+
+        button {
+            background-color: #00c750; /* Dark blue button background color */
+            color: #ffffff; /* White button text color */
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #246f9a; /* Darker blue on hover */
+        }
+
+        #myChart {
+            width: 100%;
+            height: 100%;
+        }
+
+        @media screen and (min-width: 768px) {
+            #base {
+                width: 50%; /* Set the width for the left container on larger screens */
+            }
+
+            #chartContainer {
+                width: 50%; /* Set the width for the right container on larger screens */
+            }
+        }
+    </style>
+    <style>
+        .containervalue {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        #data-container3,
+        #data-container4 {
+            box-sizing: border-box;
+            width: 48%; /* Adjust the width as needed */
+            margin: 1%;
+        }
+        #customBody {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #customButton, #customInput {
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #customButton {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #customInput {
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 3px;
+            width: 150px;
+        }
+
+        /* 3D effect on button hover */
+        #customButton:hover, #customInput:hover {
+            background-color: #45a049;
+        }
+
+        /* The Modal */
+        #customModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        /* Style for the modal content */
+        #customModalContent {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+
+        /* Close button on modal */
+        #customClose {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        #customClose:hover,
+        #customClose:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="header1">
+        <h1 style="margin-top: 0;padding-top: 0.5%; color: aliceblue; font-size: 300%;">🌿 𝓥𝓘𝓩𝓗𝓘 🌿</h1>
+        <h4 style="padding-bottom: 0.5%;color:#00c750 ;">ᴀ ᴍᴀᴄʜɪɴᴇ ʟᴇᴀʀɴɪɴɢ ᴍᴏᴅᴇʟ ꜰᴏʀ ᴄᴏɴᴛʀᴏʟʟɪɴɢ ꜱᴜᴘᴇʀ-ᴍᴀʀᴋᴇᴛ ᴄʟɪᴍᴀᴛᴇ ᴄᴏɴᴅɪᴛɪᴏɴꜱ</h4>
+    </div>
+    <div id="master">
+        <div id="base">
+            <div id="image-container">
+                <img id="display-image" src="" alt="Click Fetch Data" style="height:2%;width: 40%;">
+            </div>
+
+            <h3>DETECTED ITEM</h3>
+            <div id="data-container1"></div>
+            <div id="data-container2"></div>
+
+
+            <br>
+            <button onclick="downloadImage()">FETCH DATA</button>
+                <!-- Button to open modal for entering value -->
+            <button id="customButton" onclick="openCustomModal()" disabled>MODIFY IDEAL TEMP</button>
+        </div>
+
+
+        
+
+        <!-- The Modal -->
+        <div id="customModal" class="custom-modal">
+            <div id="customModalContent" class="custom-modal-content">
+                <span id="customClose" class="custom-close" onclick="closeCustomModal()">&times;</span>
+                <label for="customInputValue" style="font-size: 18px;">Enter the new ideal temperature (20°C-30°C): </label>
+                <input type="number" id="customInputValue" placeholder="20-30" min="20" max="30" step="0.1">
+                <button id="customUpdateButton" onclick="updateCustomFirebase()">Update Temperature</button>
+            </div>
+        </div>
+    
+
+        <div id="chartContainer">
+            <canvas id="myChart"></canvas>
+            <div class="containervalue">
+                <div id="data-container3" style="color: rgb(255, 255, 255); padding-top: 2%; font-size: 200%; font-family: 'Arial', sans-serif; font-weight: bold;"></div>
+                
+                <div id="data-container4" style="color: white; padding-top: 2%; font-size: 200%; font-family: 'Arial', sans-serif; font-weight: bold;"></div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize Firebase with your project's config
+        const firebaseConfig2 = {
+            apiKey: "AIzaSyAdMo62uud9ACB4VlbTZx35tic_6AExI_g",
+            authDomain: "nexis-d34bc.firebaseapp.com",
+            databaseURL: "https://nexis-d34bc-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nexis-d34bc",
+            storageBucket: "nexis-d34bc.appspot.com",
+            messagingSenderId: "66418150374",
+            appId: "1:66418150374:web:d29c5b32eb8554aa792427",
+            measurementId: "G-Y4B99R2R05"
+        };
+
+        firebase.initializeApp(firebaseConfig2);
+
+        function downloadImage() {
+            // Reference to the Firebase Storage bucket
+            const storageRef = firebase.storage().ref();
+
+            // Reference to the image you want to download (replace 'images/image.jpg' with your image path)
+            const imageRef = storageRef.child('data/photo.jpg');
+            document.getElementById('customButton').removeAttribute('disabled');
+            // Get the download URL for the image
+            imageRef.getDownloadURL().then(function(url) {
+                // Display the image on the webpage
+                const imgElement = document.getElementById('display-image');
+                imgElement.src = url;
+            }).catch(function(error) {
+                console.error('Error downloading image: ', error);
+            });
+        
+        const database = firebase.database();
+
+        // Reference to the data you want to fetch
+        const dataRef = database.ref("test");
+
+        // Function to update the data on the web page
+        function updateData(snapshot) {
+            const dataContainer1 = document.getElementById("data-container1");
+            const dataContainer2 = document.getElementById("data-container2");
+            datas=snapshot.val();
+            dataContainer1.innerHTML = "PRODUCT DETECTED : " + datas.item;
+            dataContainer2.innerHTML = "IDEAL TEMPERATURE :  " + datas.idealTemperature+" °C";
+        }
+
+        // Listen for changes in the data
+        dataRef.on("value", updateData);
+
+
+        // Reference to the data you want to fetch
+        const dataRef2 = database.ref("test");
+
+        // Function to update the data on the HTML page
+        function updateData2(snapshot) {
+            const dataContainer3 = document.getElementById("data-container3");
+            const dataContainer4 = document.getElementById("data-container4");
+            const data = snapshot.val();
+
+            if (data.averageTemperature) {
+                // Display the data on the webpage
+                dataContainer3.innerHTML = "T=" + JSON.stringify(data.averageTemperature, null, 2) + "°C";
+                dataContainer4.innerHTML = "RH=" + JSON.stringify(data.averageHumidity, null, 2) + "%";
+            } else {
+                dataContainer3.innerHTML = "No data available.";
+                dataContainer4.innerHTML = "No data available.";
+            }
+        }
+
+        // Listen for changes in the data
+        dataRef2.on("value", updateData2);
+
+        // Handle errors
+        dataRef2.on("error", (error) => {
+            console.error("Error:", error);
+        });
+
+        }
+    </script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdMo62uud9ACB4VlbTZx35tic_6AExI_g",
+            authDomain: "nexis-d34bc.firebaseapp.com",
+            databaseURL: "https://nexis-d34bc-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nexis-d34bc",
+            storageBucket: "nexis-d34bc.appspot.com",
+            messagingSenderId: "66418150374",
+            appId: "1:66418150374:web:d29c5b32eb8554aa792427",
+            measurementId: "G-Y4B99R2R05"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        
+        const ctx = document.getElementById('myChart');
+
+        // Function to get the list from local storage
+        function getListFromLocalStorage(key) {
+            const listString = localStorage.getItem(key);
+            return listString ? JSON.parse(listString) : Array(10).fill(0);
+        }
+
+        // Function to save the list to local storage
+        function saveListToLocalStorage(key, list) {
+            const listString = JSON.stringify(list);
+            localStorage.setItem(key, listString);
+        }
+
+        // Function to add an item to the list
+        function addItemToList(key, item) {
+
+            const list = getListFromLocalStorage(key);
+            // Check if the new item is different from the last fetched value
+            if (list[list.length - 1] !== item) {
+                // Add the new item
+                list.push(item);
+
+                // Keep the list size maximum of 10
+                if (list.length > 10) {
+                    // Remove the oldest item
+                    list.shift();
+                }
+
+                // Save the updated list to local storage
+                saveListToLocalStorage(key, list);
+            }
+        }
+
+        // Initialize both time and temp lists with 0
+        saveListToLocalStorage('timelist', Array(10).fill(0));
+        saveListToLocalStorage('templist', Array(10).fill(0));
+
+        console.log(getListFromLocalStorage('timelist'));
+        console.log(getListFromLocalStorage('templist'));
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: getListFromLocalStorage('timelist'),
+                datasets: [{
+                    label: 'Temperature',
+                    data: getListFromLocalStorage('templist'),
+                    borderWidth: 3,
+                    borderColor: 'lightgreen', // Set the line color to white
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)', // Set the fill color to white with some opacity
+                    pointBackgroundColor: 'red', // Set the color of highlighted points
+                    pointBorderColor: 'red', // Set the border color of highlighted points
+                    pointRadius: 5 // Set the radius of highlighted points
+                }]
+            },
+            options: {
+                animations: {
+                    tension: {
+                        duration: 3000,
+                        easing: 'linear',
+                        from: 1,
+                        to: 0,
+                        loop: true
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            color: 'white' // Set the title text color to white
+                        },
+                        ticks: {
+                            color: 'white' // Set the ticks text color to white
+                        }
+                    },
+                    y: {
+                        min: 20,
+                        max: 30,
+                        type: 'linear',
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Temperature',
+                            color: 'white' // Set the title text color to white
+                        },
+                        ticks: {
+                            color: 'white' // Set the ticks text color to white
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Real-time Temperature plot',
+                        color: 'white' // Set the main chart title text color to white
+                    }
+                }
+            }
+        });
+
+
+
+        // Listen for changes in the Firebase database for "time"
+        onValue(ref(database, 'test/averageTimestamp'), (timeSnapshot) => {
+            const timeData = timeSnapshot.val();
+            console.log(timeData);
+
+            function convertToInteger(timeString) {
+            // Remove colons from the string and parse it as an integer
+            return parseInt(timeString.replace(/:/g, ''));
+            }
+            const result = convertToInteger(timeData);
+            console.log(result);
+            addItemToList('timelist', result);
+
+            // Read the "temp" values from Firebase
+            onValue(ref(database, 'test/averageTemperature'), (tempSnapshot) => {
+                const tempData = tempSnapshot.val();
+                console.log(tempData);
+                addItemToList('templist', tempData);
+
+                // Update the chart data
+                chart.data.labels = getListFromLocalStorage('timelist');
+                chart.data.datasets[0].data = getListFromLocalStorage('templist');
+
+                // Update the chart
+                chart.update();
+            });
+        });
+
+
+        
+    </script>
+    <script>
+        // Reference to your Firebase database
+        var customDatabase = firebase.database();
+
+        // Function to open modal
+        function openCustomModal() {
+            document.getElementById('customModal').style.display = 'block';
+        }
+
+        // Function to close modal
+        function closeCustomModal() {
+            document.getElementById('customModal').style.display = 'none';
+        }
+
+        // Function to update Firebase with the entered value
+        function updateCustomFirebase() {
+            var customInputValue = parseFloat(document.getElementById('customInputValue').value);
+            if (!isNaN(customInputValue) && customInputValue >= 20 && customInputValue <= 30) {
+                // Update only the idealTemperature property in Firebase
+                customDatabase.ref('test').update({
+                    idealTemperature: customInputValue
+                });
+                // Show modal
+                alert('Ideal Temperature has been entered successfully!');
+                closeCustomModal();
+            } else {
+                alert('Please enter a valid float value between 20 and 30 (in celcius)');
+            }
+        }
+
+    </script>
+    <script>
+        const database5 = firebase.database();
+         let temperatureList = [];
+         function playBeepUntilOk() {
+                database5.ref('detection').update({
+                            alert: 1
+                        });
+                // Show an alert and stop the beep when the user clicks "OK"
+                alert('Some error in the SYSTEM');
+
+            }
+
+// Function to check for constant temperature
+function checkTemperatureConsistency(snapshot) {
+    
+  const data = snapshot.val();
+  // Assuming your data structure looks like { averageTimestamp: "HH:MM:SS", averageTemperature: 25.5 }
+  const {idealTemperature, averageTimestamp, averageTemperature } = data;
+
+  // Add the current temperature and timestamp to the list
+  temperatureList.push({ timestamp: averageTimestamp, temperature: averageTemperature });
+  console.log({averageTemperature,averageTimestamp});
+  
+  // Check if the temperature remains constant for 2 minutes
+  if (isTemperatureConstant(idealTemperature,averageTemperature)) {
+    
+    // Clear the temperature list after displaying the alert
+    temperatureList = [];
+    playBeepUntilOk();
+    database5.ref('detection').update({
+                            alert: 0
+                        });
+  }
+
+  else{console.log("No");}
+}
+
+// Function to check if temperature is constant for 2 minutes
+function isTemperatureConstant(idealTemperature,averageTemperature) {
+  // Check if there are at least two entries in the temperature list
+  if (temperatureList.length >= 2) {
+    // Get the timestamps of the first and last entries
+    const firstTimestamp = convertToInteger(temperatureList[0].timestamp);
+    const lastTimestamp = convertToInteger(temperatureList[temperatureList.length - 1].timestamp);
+
+    // Calculate the time difference in milliseconds
+    const timeDifference = lastTimestamp - firstTimestamp;
+
+    // Check if the time difference is greater than or equal to 2 minutes (120000 milliseconds)
+    return timeDifference >= 300;
+  }
+
+  return false;
+}
+
+// Function to convert string time to Date object
+      function convertToInteger(timeString) {
+          // Remove colons from the string and parse it as an integer
+          return parseInt(timeString.replace(/:/g, ''));
+          }
+
+// Monitor changes in the Firebase database
+const firebaseRef5 = database5.ref('test'); // Assuming the path is 'test' in your Firebase database
+firebaseRef5.on('value', checkTemperatureConsistency);
+    </script>
+
+</body>
+</html>
