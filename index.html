@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIZHI</title>
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        background: url('vizhi_bg.png') no-repeat center center fixed;
+        background-size: cover;
+        background-position: center top;
+    }
+
+        h1 {
+            font-size: 300%;
+            padding-top: 0.5%;
+            margin: 0;
+            color: #ffffff;
+        }
+        h4{
+            padding-bottom: 0.5%;
+            color:#00c750;
+        }
+        #header1{
+            background-color: rgba(0, 0, 0, 0.655);
+        }
+
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        button {
+            padding: 25% 5%;
+            font-size: 18px;
+            margin: 10px;
+            background-color: #2195f36a; /* Dark blue button background color */
+            color: #ffffff; /* White button text color */
+            border: 1px solid #ffffff; /* Darker blue border */
+            border-radius: 30px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); /* Shadow effect */
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #555; /* Darker gray for disabled button */
+            border: 1px solid #444; /* Darker gray border for disabled button */
+        }
+
+        button:hover {
+            background-color: #00c750a9; /* Darker blue on hover */
+        }
+
+        @media screen and (min-width: 768px) {
+            .button-container {
+                grid-template-columns: repeat(2, 1fr); /* Adjust columns for larger screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header1">
+    <h1>🌿 𝓥𝓘𝓩𝓗𝓘 🌿</h1>
+    <h4>ᴀ ᴍᴀᴄʜɪɴᴇ ʟᴇᴀʀɴɪɴɢ ᴍᴏᴅᴇʟ ꜰᴏʀ ᴄᴏɴᴛʀᴏʟʟɪɴɢ ꜱᴜᴘᴇʀ-ᴍᴀʀᴋᴇᴛ ᴄʟɪᴍᴀᴛᴇ ᴄᴏɴᴅɪᴛɪᴏɴꜱ</h4>
+    </div>
+
+    <div class="button-container">
+        <button id="button1" onclick="buttonClick1()" disabled>𝐒𝐘𝐒𝐓𝐄𝐌 1</button>
+        <button id="button2" onclick="buttonClick2()" disabled>𝐒𝐘𝐒𝐓𝐄𝐌 2</button>
+        <button id="button3" onclick="buttonClick3()" disabled>𝐒𝐘𝐒𝐓𝐄𝐌 3</button>
+        <button id="button4" onclick="buttonClick4()" disabled>𝐒𝐘𝐒𝐓𝐄𝐌 4</button>
+    </div>
+
+    <!-- Include Firebase SDK (make sure to replace YOUR_API_KEY with your actual Firebase API key) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        // Function to handle button clicks and redirect to another webpage
+    function buttonClick1() {
+        window.open("delete.html", '_blank');
+    }
+
+    function buttonClick2() {
+        window.open("delete.html", '_blank');
+    }
+
+    function buttonClick3() {
+        window.open("delete.html", '_blank');
+    }
+
+    function buttonClick4() {
+        window.open("delete.html", '_blank');
+    }
+
+    </script>
+
+    <script>
+        // Replace with your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdMo62uud9ACB4VlbTZx35tic_6AExI_g",
+            authDomain: "nexis-d34bc.firebaseapp.com",
+            databaseURL: "https://nexis-d34bc-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nexis-d34bc",
+            storageBucket: "nexis-d34bc.appspot.com",
+            messagingSenderId: "66418150374",
+            appId: "1:66418150374:web:d29c5b32eb8554aa792427",
+            measurementId: "G-Y4B99R2R05"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Reference to your Firebase database
+        const database = firebase.database();
+
+        // Listen for changes in Firebase variables
+        database.ref('detection/product1').on('value', snapshot => {
+            const isEnabled = snapshot.val() === 1;
+            document.getElementById('button1').disabled = !isEnabled;
+        });
+
+        database.ref('detection/product2').on('value', snapshot => {
+            const isEnabled = snapshot.val() === 1;
+            document.getElementById('button2').disabled = !isEnabled;
+        });
+
+        database.ref('detection/product3').on('value', snapshot => {
+            const isEnabled = snapshot.val() === 1;
+            document.getElementById('button3').disabled = !isEnabled;
+        });
+
+        database.ref('detection/product4').on('value', snapshot => {
+            const isEnabled = snapshot.val() === 1;
+            document.getElementById('button4').disabled = !isEnabled;
+        });
+
+        // Function to handle button clicks
+        function buttonClick(productNumber) {
+            // Add your logic here for button click
+            console.log(`Button ${productNumber} clicked`);
+        }
+    </script>
+</body>
+</html>
